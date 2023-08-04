@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphabet Music</title>
+    <link rel="icon" type="img/png" href="/images/icons/logo.png">
+    <!-- INCLUDING JQUERY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <!-- INCLUDING TOASTR LIB-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+
+<body>
+    <!-- HEADER OF THE APP -->
+    <header class="header">
+        <div class="heading-logo-container">
+            <div>
+                <img src="/images/icons/logo.png" alt="">
+            </div>
+            <h1 id="app-heading" class="text-hover">Alphabet Music </h1>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="navigation">
+            <p class="login text-hover" id="login-user">Log in</p>
+            <p class="signup text-hover" id="signup-user">Sign Up</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+        <p>UPLOAD SONG</p>
+
+        <!-- TO UPLOAD SONG -->
+        <form class="upload-song-form" action="" enctype="multipart/form-data">
+            <div class="file-container">
+                <input hidden type="file" name="song" id="song-file-input">
+                <div id="file-name"></div>
+                <label for="song-file-input" class="custom-file-input button-hover">Choose File</label>
+            </div>
+            <input class="button-hover" id="title" type="text" name="title" placeholder="Title.." id="">
+            <input id="artist" type="text" class="button-hover" name="artist" placeholder="Artist.." id="">
+            <input id="album" type="text" name="album" class="button-hover" placeholder="Album.." id="">
+            <input type="submit" id="upload-song-btn" value="UPLOAD" class="button-hover">
+        </form>
+    </main>
+    <!-- ASIDE SECTION -->
+    <aside class="aside">
+
+        <!-- LOGIN FORM -->
+        <div class="login-form-container">
+            <form class="login-form" action="">
+                <label for="name">Email</label>
+                <input required class="button-hover" type="email" name="email" id="" placeholder="Enter your email..">
+                <label for="name">Password</label>
+                <input required class="button-hover" type="password" name="password" placeholder="Enter a password..">
+                <input class="button-hover" type="submit" name="" id="submit-btn-login" value="LOG IN">
+            </form>
+            <button class="close-form button-hover">CLOSE</button>
+        </div>
+
+        <!-- SIGN UP FORM -->
+        <div class="sign-up-container">
+            <form class="signup-form" action="">
+                <label for="name">Name</label>
+                <input required class="button-hover" type="text" name="name" id="" placeholder="Enter your name..">
+                <label for="email">Email</label>
+                <input required class="button-hover" type="email" name="email" id="" placeholder="Enter your email..">
+                <label for="password">Password</label>
+                <input required class="button-hover" type="password" name="password" placeholder="Enter a password..">
+                <label for="name">Confirm Password</label>
+                <input required class="button-hover" type="password" name="confirm_password" id=""
+                    placeholder="Confirm Password..">
+                <input class="button-hover" type="submit" name="" id="submit-btn-signup" value="SIGN UP">
+            </form>
+            <button class="close-form button-hover  ">CLOSE</button>
+        </div>
+    </aside>
+
+
+
+    <!-- INCLUDING SCRIPT -->
+    <script src="/js/home.js"></script>
+</body>
+
+</html>
