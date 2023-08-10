@@ -36,7 +36,8 @@ const uploadFile = async (req, res) => {
     const metadata = await mm.parseFile(path);
 
     // Extract the relevant metadata fields from the parsed metadata
-    const { title, artist, album, duration, picture } = metadata.common;
+    const { title, artist, album, picture } = metadata.common;
+    const {duration}=metadata.format;
 
     const songTitle = req.body.title || title;
     const artistName = req.body.artist || artist;
@@ -61,12 +62,11 @@ const uploadFile = async (req, res) => {
       coverPath = `/${coverFilename}`;
     }
 
-    // creating new song in database 
     const song = await Song.create({
       title: songTitle,
       artist: artistName,
       album: albumName,
-      duration,
+      duration:duration,
       path: `/${filename}`,
       uploadedBy: req.user._id,
       coverArt: coverPath
