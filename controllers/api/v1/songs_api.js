@@ -2,14 +2,13 @@
 import Song from "../../../models/Song.js";
 import User from "../../../models/User.js";
 import * as mm from "music-metadata";
-import fs from "fs/promises";
+import fs from "fs";
 import Path from "path";
-import fileSystem from "fs";
 import validator from "validator";
 
 
-const COVER_PATH = Path.resolve("uploads/covers");
-const SONG_PATH = Path.resolve("uploads/songs");
+const COVER_PATH = Path.resolve("uploads","covers");
+const SONG_PATH = Path.resolve("uploads","songs");
 
 
 const uploadFile = async (req, res) => {
@@ -25,7 +24,7 @@ const uploadFile = async (req, res) => {
 
     //to check a file is valid or not
     if (!validator.isIn(req.file.mimetype, allowed)) {
-      fileSystem.unlinkSync(path);
+      await fs.promises.unlink(path);
       return res.status(400).json({ message: "Provide a valid file" });
     }
 
@@ -45,7 +44,7 @@ const uploadFile = async (req, res) => {
 
     //id not title is provided to the song
     if (!songTitle) {
-      fileSystem.unlinkSync(path);
+      await fs.promises.unlink(path);
       return res.status(400).json({ message: "Provide a valid Name" });
     }
 
@@ -58,8 +57,8 @@ const uploadFile = async (req, res) => {
       const coverFilename = `cover-${Date.now() + "-" + Math.round(Math.random() * 1E9)}`;
 
       const coverPathOnDisk = Path.join(COVER_PATH, coverFilename);
-      await fs.writeFile(coverPathOnDisk, coverArtData);
-      coverPath = `/${coverFilename}`;
+      await fs.promises.writeFile(coverPathOnDisk, coverArtData);
+      coverPath = coverFilename;
     }
 
     const song = await Song.create({
@@ -67,7 +66,7 @@ const uploadFile = async (req, res) => {
       artist: artistName,
       album: albumName,
       duration:duration,
-      path: `/${filename}`,
+      path: filename,
       uploadedBy: req.user._id,
       coverArt: coverPath
     });
@@ -117,10 +116,10 @@ const destroy = async (req, res) => {
 
 
     //deleting the song and cover art associated to it
-    const songPath = Path.join(SONG_PATH, song.path.replace("/", ""));
-    const coverArtPath = Path.join(COVER_PATH, song.coverArt.replace("/", ""));
-    fileSystem.unlinkSync(songPath);
-    fileSystem.unlinkSync(coverArtPath);
+    const songPath = Path.join(SONG_PATH, song.path);
+    const coverArtPath = Path.join(COVER_PATH, song.coverArt);
+    await fs.promises.unlink(songPath);
+    await fs.promises.unlink(coverArtPath);
 
     //deleting song from uploaded songs array
     await User.findByIdAndUpdate(song.uploadedBy, { $pull: { uploadedSongs: song._id } });

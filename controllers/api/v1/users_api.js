@@ -14,8 +14,8 @@ import Path from "path";
 import fileSystem from "fs";
 
 
-const COVER_PATH = Path.resolve("uploads/covers");
-const SONG_PATH = Path.resolve("uploads/songs");
+const COVER_PATH = Path.resolve("uploads","covers");
+const SONG_PATH = Path.resolve("uploads","songs");
 const salt = 10;
 
 const jwtSecret = process.env.JWT_SECRET || "secretkey";
@@ -43,7 +43,7 @@ const create = async (req, res) => {
         const user = await User.findOne({ email: email });
         //is user already present
         if (user)
-            return res.status(403).json({ message: "User already exists" });
+            return res.status(403).json({ message: "User already exists!" });
 
         //creating new user
         const encryptedPass = await bcrypt.hash(password, salt);
@@ -119,7 +119,7 @@ const update = async (req, res) => {
         //IF WANT TO UPDATE SOMEONE ELSE'S DETAILS
 
         const user = await User.findById(req.params.id);
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) return res.status(404).json({ message: "User not found!" });
 
         //If password is not provided
         if (!password) return res.status(403).json({ message: "Unauthorized! provide your password to authenticate " });
@@ -151,22 +151,22 @@ const update = async (req, res) => {
 //to delete a user
 const destroy = async (req, res) => {
     try {
-        if (!req.body.password) return res.status(403).json({ message: "Unauthorized! Pass" });
+        if (!req.body.password) return res.status(403).json({ message: "Unauthorized! Provide password to establish identity" });
 
         const user = await User.findById(req.user._id);
         //if user not found
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) return res.status(404).json({ message: "User not found!" });
 
         //to authenticate the user before deleting
         const isAuthentic = await bcrypt.compare(req.body.password, user.password);
-        if (!isAuthentic) return res.status(403).json({ message: "Unauthorized" });
+        if (!isAuthentic) return res.status(403).json({ message: "Unauthorized!" });
 
         //deleting songs associated to that user
         for (let song of user.uploadedSongs) deleteSongs(song);
 
-        jwt.sign(user.toJSON(), jwtSecret, { expiresIn: 1 })
+        const token=jwt.sign(user.toJSON(), jwtSecret, { expiresIn: 1 })
         await user.deleteOne();
-        return res.status(200).json({ message: "User deleted Successfully", user: { name: user.name, email: user.email } });
+        return res.status(200).json({ message: "User deleted Successfully", user: { name: user.name, email: user.email },token });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal server error" });
@@ -181,10 +181,10 @@ const deleteSongs = async (id) => {
         const song = await Song.findById(id);
         if (!song) return;
 
-        const songPath = Path.join(SONG_PATH, song.path.replace("/", ""));
-        const coverArtPath = Path.join(COVER_PATH, song.coverArt.replace("/", ""));
-        fileSystem.unlinkSync(songPath);
-        fileSystem.unlinkSync(coverArtPath);
+        const songPath = Path.join(SONG_PATH, song.path);
+        const coverArtPath = Path.join(COVER_PATH, song.coverArt);
+        await fileSystem.promises.unlink(songPath);
+        await fileSystem.promises.unlink(coverArtPath);
 
         // Delete the song from database
         await song.deleteOne();
