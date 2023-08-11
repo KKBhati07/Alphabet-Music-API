@@ -98,8 +98,6 @@ const update = async (req, res) => {
         const { name, email, password, new_password, confirm_password } = req.body;
         //IF USER WANTS TO UPDATE ITS OWN DETAILS
         if (!req.params.id) {
-            console.log("HERE");
-
 
             const user = await User.findById(req.user._id);
             if (!user) return res.status(404).json({ message: "User not found" });
@@ -116,9 +114,9 @@ const update = async (req, res) => {
             await user.save();
             return res.status(200).json({ message: "User details updated successfully" });
 
-
         }
 
+        //IF WANT TO UPDATE SOMEONE ELSE'S DETAILS
 
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ message: "User not found" });
