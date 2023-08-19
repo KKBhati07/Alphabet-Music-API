@@ -3,6 +3,16 @@ import express from "express";
 const app = express();
 const port = process.env.PORT || 3300;
 
+//importing swagger
+import swagger from "swagger-ui-express";
+import swaggerDoc from "./swagger.json" assert{type:"json"};
+
+app.use("/api-docs",swagger.serve,swagger.setup(swaggerDoc));
+
+//importing body parser
+import bodyParser from "body-parser";
+app.use(bodyParser.json());
+
 
 import db from "./config/mongoose.js";
 // importing cors

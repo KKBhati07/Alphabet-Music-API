@@ -1,16 +1,19 @@
 //importing important modules
 import Song from "../../../models/Song.js";
 import User from "../../../models/User.js";
+import Artist from "../../../models/Artist.js";
+import Album from "../../../models/Album.js";
 import * as mm from "music-metadata";
 import fs from "fs";
 import Path from "path";
 import validator from "validator";
 
 
-const COVER_PATH = Path.resolve("uploads","covers");
-const SONG_PATH = Path.resolve("uploads","songs");
+const COVER_PATH = Path.resolve("uploads", "covers");
+const SONG_PATH = Path.resolve("uploads", "songs");
 
 
+//to upload a file/song
 const uploadFile = async (req, res) => {
   try {
     //checking if the user exists
@@ -28,25 +31,42 @@ const uploadFile = async (req, res) => {
       return res.status(400).json({ message: "Provide a valid file" });
     }
 
-
-
-
     // extracting song metadata
     const metadata = await mm.parseFile(path);
 
     // Extract the relevant metadata fields from the parsed metadata
     const { title, artist, album, picture } = metadata.common;
-    const {duration}=metadata.format;
+    const { duration } = metadata.format;
+
 
     const songTitle = req.body.title || title;
-    const artistName = req.body.artist || artist;
-    const albumName = req.body.album || album;
+    const artistName = req.body.artist || artist || "Unknown";
+    const albumName = req.body.album || album||"Unknown";
 
     //id not title is provided to the song
     if (!songTitle) {
       await fs.promises.unlink(path);
       return res.status(400).json({ message: "Provide a valid Name" });
     }
+
+    //checking if the song is already uploaded
+    const isUploaded = await Song.findOne({ title: songTitle });
+    if (isUploaded) {
+      await fs.promises.unlink(path);
+      return res.status(400).json({ message: "Song already Exists" });
+    }
+
+
+    //finding, if the artist already exists
+    let fetchArtist = await Artist.findOne({ name: artistName });
+    //if not, then creating the artist
+    if (!fetchArtist) fetchArtist = await Artist.create({ name: artistName });
+
+
+    //finding, if the album already exists
+    let fetchAlbum = await Album.findOne({ name: albumName });
+    //if not, then creating the artist
+    if (!fetchAlbum) fetchAlbum = await Album.create({ name: albumName });
 
     let coverPath = null;
     //TO EXTRACT COVER ART FROM METADATA AND SAVE IN DATABASE
@@ -63,9 +83,9 @@ const uploadFile = async (req, res) => {
 
     const song = await Song.create({
       title: songTitle,
-      artist: artistName,
-      album: albumName,
-      duration:duration,
+      artist: fetchArtist._id,
+      album: fetchAlbum._id,
+      duration: duration,
       path: filename,
       uploadedBy: req.user._id,
       coverArt: coverPath
@@ -78,9 +98,17 @@ const uploadFile = async (req, res) => {
     //adding song to user
     user.uploadedSongs.push(song);
     await user.save();
-    //if the song upload successfully
 
-    return res.status(200).json({
+    //adding song to artist
+    fetchArtist.songs.push(song);
+    await fetchArtist.save();
+    
+    //adding song to albums
+    fetchAlbum.songs.push(song);
+    await fetchAlbum.save();
+
+    //if the song upload successfully
+    return res.status(201).json({
       message: "Song uploaded successfully",
     });
 
@@ -93,7 +121,8 @@ const uploadFile = async (req, res) => {
 //to fetch all the songs from the server
 const fetchSongs = async (req, res) => {
   try {
-    const songs = await Song.find();
+    const songs = await Song.find().populate("artist", "name").populate("uploadedBy", "name")
+      .select("title artist album duration path coverArt uploadedBy");
     return res.status(200).json({ message: "Songs Fetched successfully", data: songs });
 
   } catch (error) {
@@ -103,7 +132,7 @@ const fetchSongs = async (req, res) => {
 }
 
 
-
+//to delete a song from the database
 const destroy = async (req, res) => {
   try {
 
@@ -112,7 +141,7 @@ const destroy = async (req, res) => {
 
     //id the delete request is not made by the uploader
     if (song.uploadedBy != req.user._id)
-      return res.status(403).json({ message: "Not authorized to delete the song" });
+      return res.status(401).json({ message: "Not authorized to delete the song" });
 
 
     //deleting the song and cover art associated to it
@@ -123,6 +152,26 @@ const destroy = async (req, res) => {
 
     //deleting song from uploaded songs array
     await User.findByIdAndUpdate(song.uploadedBy, { $pull: { uploadedSongs: song._id } });
+    //deleting song from artist's songs array
+    await Artist.findByIdAndUpdate(song.artist, { $pull: { songs: song._id } });
+
+    const updatedArtist = await Artist.findById(song.artist);
+
+    //if there are no songs with the artist, then deleting the artist
+    if (updatedArtist.songs.length == 0) await updatedArtist.deleteOne();
+
+
+      
+    //deleting song from albums's songs array
+    await Album.findByIdAndUpdate(song.album, { $pull: { songs: song._id } });
+
+    const updatedAlbum = await Album.findById(song.album);
+
+    //if there are no songs with the album, then deleting the album
+    if (updatedAlbum.songs.length == 0) await updatedAlbum.deleteOne();
+
+
+
 
     // Delete the song from database
     await song.deleteOne();
@@ -134,7 +183,25 @@ const destroy = async (req, res) => {
   }
 }
 
-const controllers = { uploadFile, fetchSongs, destroy };
+//to search uploaded songs
+const search = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) return res.status(400).json({ message: "Invalid search" });
+    const songs = await Song.find({ title: { $regex: query, $options: "i" } }).populate("artist", "name")
+      .populate("uploadedBy","name")
+      .select("title artist album duration path coverArt uploadedBy");
+
+    return res.status(200).json({message:"Songs fetched", data:songs});
+
+
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+
+  }
+}
+
+const controllers = { uploadFile, fetchSongs, destroy, search };
 //exporting controllers
 export default controllers;
 

@@ -164,6 +164,7 @@ body {
 }
 
 .file-container>div {
+    overflow: scroll;
     border: 2px solid var(--borderColor);
     border-radius: 5px;
     color: var(--fontColor);

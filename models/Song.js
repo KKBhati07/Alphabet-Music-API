@@ -8,10 +8,12 @@ const songSchema = new mongoose.Schema({
         required: true
     },
     artist: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Artist"
     },
     album: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Album"
     },
     duration: {
         type: String,
@@ -22,6 +24,7 @@ const songSchema = new mongoose.Schema({
     },
     uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required: true
     },
     coverArt: {

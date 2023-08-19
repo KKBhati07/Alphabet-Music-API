@@ -1,0 +1,621 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Alphabet Music API",
+        "description": "API for uploading and managing music files.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3300",
+            "description": "Local development server"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "paths": {
+        "/api/v1/users/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sign Up",
+                "description": "Create a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "confirm-password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "confirm-password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },"409": {
+                        "description": "Conflict"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/create-session": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sign In",
+                "description": "User login to get token",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "401": {
+                        "description": "unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update",
+                "description": "to update the details of a user",
+                "security":[
+                    {"bearerAuth":[]}
+
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "new_password": {
+                                        "type": "string"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "new_password": {
+                                        "type": "string"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },"401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/update/:id": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update",
+                "description": "to update other user's details,",
+                "security":[
+                    {"bearerAuth":[]}
+
+                ],
+                "parameters":[{
+                    "name":"id",
+                    "in":"path",
+                    "description":"ID of the user to update",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name":{"type":"string"},
+                                    "email":{"type":"string"},
+                                    "password":{"type":"string"},
+                                    "new_password": {
+                                        "type": "string"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name":{"type":"string"},
+                                    "email":{"type":"string"},
+                                    "password":{"type":"string"},
+                                    "new_password": {
+                                        "type": "string"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },"401": {
+                        "description": "Unauthorized"
+                    },"403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/users/destroy": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete",
+                "description": "to delete a user",
+                "security":[
+                    {"bearerAuth":[]}
+
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password":{"type":"string"}
+                                }
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password":{"type":"string"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Successful deletion"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/users/uploads": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Uploaded songs",
+                "description": "to get uploaded songs by the user",
+                "security":[
+                    {"bearerAuth":[]}
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/songs/upload": {
+            "post": {
+                "tags": [
+                    "Songs"
+                ],
+                "summary": "Upload Song",
+                "description": "to upload a song to the server",
+                "security":[
+                    {"bearerAuth":[]}
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "song":{"type":"string","format":"binary"},
+                                    "title":{"type":"string"},
+                                    "artist":{"type":"string"},
+                                    "album":{"type":"string"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },"401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/songs/fetch": {
+            "get": {
+                "tags": [
+                    "Songs"
+                ],
+                "summary": "Get songs",
+                "description": "to get all songs from the server",
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/songs/destroy/{id}": {
+            "delete": {
+                "tags": [
+                    "Songs"
+                ],
+                "summary": "Delete",
+                "description": "to delete a song from the server",
+                "security":[
+                    {"bearerAuth":[]}
+                ],
+                "parameters":[{
+                    "name":"id",
+                    "in":"path",
+                    "description":"ID of the song to be deleted",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },"401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/songs/search": {
+            "get": {
+                "tags": [
+                    "Songs"
+                ],
+                "summary": "Search",
+                "description": "to search songs from server",
+                "parameters":[{
+                    "name":"query",
+                    "in":"query",
+                    "description":"The search query",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        
+        "/api/v1/artists/fetch": {
+            "get": {
+                "tags": [
+                    "Artists"
+                ],
+                "summary": "Artists",
+                "description": "to get all artists from server",
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/artists/{id}/songs": {
+            "get": {
+                "tags": [
+                    "Artists"
+                ],
+                "summary": "Songs",
+                "description": "to get all the sings by the artists from server",
+                "parameters":[{
+                    "name":"id",
+                    "in":"path",
+                    "description":"artist Id",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/artists/search": {
+            "get": {
+                "tags": [
+                    "Artists"
+                ],
+                "summary": "Search ",
+                "description": "to search artists from server",
+                "parameters":[{
+                    "name":"query",
+                    "in":"query",
+                    "description":"The search query",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        
+        "/api/v1/albums/fetch": {
+            "get": {
+                "tags": [
+                    "Albums"
+                ],
+                "summary": "Albums",
+                "description": "to get all the albums from server",
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/albums/{id}/songs": {
+            "get": {
+                "tags": [
+                    "Albums"
+                ],
+                "summary": "Albums",
+                "description": "to get all songs by albums from server",
+                "parameters":[{
+                    "name":"id",
+                    "in":"path",
+                    "description":"album Id",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },"/api/v1/albums/search": {
+            "get": {
+                "tags": [
+                    "Albums"
+                ],
+                "summary": "Search ",
+                "description": "to search the albums from server",
+                "parameters":[{
+                    "name":"query",
+                    "in":"query",
+                    "description":"The search query",
+                    "required":true,
+                    "schema":{"type":"string"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+
+    }
+}

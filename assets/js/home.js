@@ -92,7 +92,8 @@
         $.ajax({
             type: "post",
             url: "/api/v1/users/create-session",
-            data: data,
+            contentType: "application/json",
+            data: JSON.stringify(data),
             success: function (response) {
                 //to make changes on DOM after successful login
                 $(".signup").text(response.name).removeAttr("id");
@@ -122,8 +123,6 @@
 
 
 
-
-
     // -------------------TO CREATE---------------------
 
     //to create a new user
@@ -131,7 +130,8 @@
         $.ajax({
             type: "post",
             url: "/api/v1/users/create",
-            data: data,
+            contentType: "application/json",
+            data: JSON.stringify(data),
             success: function (response) {
                 //to notify the user
                 toastr.success("Signed up successfully!");
@@ -150,16 +150,22 @@
     //to submit the login form
     function loginFormSubmitHandler(event) {
         event.preventDefault();
-        createSession($(".login-form").serialize());
+        const email=this.email.value;
+        const password=this.password.value;
+        createSession({email,password});
     }
-
-
+    
+    
     //to submit the signup form
     function signupFormSubmitHandler(event) {
         event.preventDefault();
+        const name=this.name.value;
+        const email=this.email.value;
+        const password=this.password.value;
+        const confirm_password=this.confirm_password.value;
 
         //to create new uer
-        createUser($(".signup-form").serialize());
+        createUser({name,email,password,confirm_password});
     }
 
 
@@ -178,7 +184,7 @@
         let title = $("#title").val();
         let artist = $("#artist").val();
         let album = $("#album").val();
-        var fileExtension = songFile.name.split(".").pop().toLowerCase();
+        
 
         formData.append("song", songFile);
         formData.append("title", title);

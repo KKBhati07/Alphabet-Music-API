@@ -25,6 +25,13 @@ router.patch("/update/:id", authenticateToken, userApiController.update);
 //to update user details
 router.patch("/update", authenticateToken, userApiController.update);
 
+//to get uploaded songs
+router.get("/uploads", authenticateToken, userApiController.uploads);
+
+//if the user hitting paths, other then  specified endpoints
+import {resourceNotFound} from "../../../controllers/404_controller.js";
+router.use(resourceNotFound);
+
 
 //exporting router
 export default router;

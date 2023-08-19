@@ -15,7 +15,7 @@ export const authenticateToken = (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     jwt.verify(token, jwtSecret, (error, decodedToken) => {
-        if (error) return res.status(403).json({
+        if (error) return res.status(401).json({
             message: "Invalid token"
         });
         // setting the decoded user in request user

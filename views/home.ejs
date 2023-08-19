@@ -38,7 +38,7 @@
         <!-- TO UPLOAD SONG -->
         <form class="upload-song-form" action="" enctype="multipart/form-data">
             <div class="file-container">
-                <input hidden type="file" name="song" id="song-file-input">
+                <input hidden accept="audio/*" type="file" name="song" id="song-file-input">
                 <div id="file-name"></div>
                 <label for="song-file-input" class="custom-file-input button-hover">Choose File</label>
             </div>
@@ -64,7 +64,7 @@
         </div>
 
         <!-- SIGN UP FORM -->
-        <div class="sign-up-container">
+        <div class="sign-up-container" enctype="application/json">
             <form class="signup-form" action="">
                 <label for="name">Name</label>
                 <input required class="button-hover" type="text" name="name" id="" placeholder="Enter your name..">

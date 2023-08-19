@@ -6,7 +6,7 @@ const router = express.Router();
 import homeController from "../controllers/home_controller.js";
 
 
-import api from "./api/index.js"
+import api from "./api/index.js";
 router.use("/api", api);
 
 //to render homepage

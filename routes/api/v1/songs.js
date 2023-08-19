@@ -15,8 +15,15 @@ router.post("/upload", authenticateToken, upload.single("song"), songsApiControl
 //to fetch songs
 router.get("/fetch", songsApiController.fetchSongs);
 
+//to search songs
+router.get("/search", songsApiController.search);
+
 //to delete a song from server
 router.delete("/destroy/:id", authenticateToken, songsApiController.destroy);
+
+//if the user hitting paths, other then  specified endpoints
+import {resourceNotFound} from "../../../controllers/404_controller.js";
+router.use(resourceNotFound);
 
 
 //exporting router
