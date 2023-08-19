@@ -45,8 +45,8 @@ To use the Alphabet Music API, you can make HTTP requests to the provided endpoi
 
 ## Swagger Documentation
 
-- Explore the API using the Swagger documentation. After starting the server.
-- Navigate to `http://localhost:3300/api-docs` in your web browser to access the Swagger UI interface.
+- Explore the API using the Swagger documentation.
+- After starting the server, navigate to `http://localhost:3300/api-docs` in your web browser to access the Swagger UI interface.
 - It provides a user-friendly way to understand and test the API endpoints.
 
 ## Authentication
