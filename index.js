@@ -18,6 +18,9 @@ import db from "./config/mongoose.js";
 // importing cors
 import cors from "cors";
 
+//importing logger middleware
+import {logger} from "./config/logger_middleware.js"
+
 
 //using cors
 app.use(cors());
@@ -37,6 +40,9 @@ app.set("views", "./views");
 
 //using decoder to read from POST requests
 app.use(express.urlencoded({ extended: true }));
+
+//using logger middleware
+app.use(logger);
 
 //routing all requests to routes
 import router from "./routes/index.js"

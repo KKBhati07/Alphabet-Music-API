@@ -10,8 +10,12 @@ import jwt from "jsonwebtoken";
 //importing bcrypt
 import bcrypt from "bcrypt";
 
+// importing path and filesystem
 import Path from "path";
 import fileSystem from "fs";
+
+// importing logger middleware function
+import { log } from "../../../config/logger_middleware.js";
 
 
 const COVER_PATH = Path.resolve("uploads", "covers");
@@ -54,6 +58,7 @@ const create = async (req, res) => {
         return res.status(400).json({ message: "Unable to signup!" });
 
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal Server Error" });
     }
     
@@ -78,6 +83,7 @@ const createSession = async (req, res) => {
         });
         
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
     }
 
@@ -140,6 +146,7 @@ const update = async (req, res) => {
         return res.status(202).json({ message: "User details updated successfully" });
 
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
 
     }
@@ -168,6 +175,7 @@ const destroy = async (req, res) => {
         return res.status(204).json({ message: "User deleted Successfully", user: { name: user.name, email: user.email }, token });
 
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
 
     }
@@ -188,6 +196,7 @@ const deleteSongs = async (id) => {
         // Delete the song from database
         await song.deleteOne();
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return;
 
     }
@@ -208,6 +217,7 @@ const uploads = async (req, res) => {
 
         return res.status(200).json({ message: "Songs uploaded by the user fetched successfully", data: songs });
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
     }
 

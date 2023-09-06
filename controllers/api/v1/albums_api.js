@@ -2,6 +2,9 @@
 import Album from "../../../models/Album.js";
 import Song from "../../../models/Song.js";
 
+// importing logger middleware function
+import { log } from "../../../config/logger_middleware.js";
+
 
 //to fetch all the albums
 const fetch = async (req, res) => {
@@ -13,6 +16,7 @@ const fetch = async (req, res) => {
         return res.status(200).json({message:"Albums fetched successfully", data:albums});
         
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
 
     }
@@ -40,7 +44,7 @@ const fetchSongs = async (req, res) => {
  
         
     } catch (error) {
-
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
         
         
@@ -58,6 +62,7 @@ const search=async(req,res)=>{
         return res.status(200).json({ message: "Albums Fetched", data: albums});
         
     } catch (error) {
+        log(`URL: ${req.url} ${error}`,"error.txt");
         return res.status(500).json({ message: "Internal server error" });
         
     }

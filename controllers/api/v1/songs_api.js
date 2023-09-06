@@ -7,6 +7,7 @@ import * as mm from "music-metadata";
 import fs from "fs";
 import Path from "path";
 import validator from "validator";
+import { log } from "../../../config/logger_middleware.js";
 
 
 const COVER_PATH = Path.resolve("uploads", "covers");
@@ -114,6 +115,7 @@ const uploadFile = async (req, res) => {
 
     //is something goes wrong
   } catch (error) {
+    log(`URL: ${req.url} ${error}`,"error.txt");
     return res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -126,6 +128,7 @@ const fetchSongs = async (req, res) => {
     return res.status(200).json({ message: "Songs Fetched successfully", data: songs });
 
   } catch (error) {
+    log(`URL: ${req.url} ${error}`,"error.txt");
     return res.status(500).json({ message: "Internal Server Error" });
 
   }
@@ -178,6 +181,7 @@ const destroy = async (req, res) => {
     return res.status(200).json({ message: "Song deleted successfully!", deleted: { id: song._id, title: song.title, } });
 
   } catch (error) {
+    log(`URL: ${req.url} ${error}`,"error.txt");
     return res.status(500).json({ message: "Internal server error" });
 
   }
@@ -196,6 +200,7 @@ const search = async (req, res) => {
 
 
   } catch (error) {
+    log(`URL: ${req.url} ${error}`,"error.txt");
     return res.status(500).json({ message: "Internal server error" });
 
   }
