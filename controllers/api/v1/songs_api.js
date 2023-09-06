@@ -121,7 +121,7 @@ const uploadFile = async (req, res) => {
 //to fetch all the songs from the server
 const fetchSongs = async (req, res) => {
   try {
-    const songs = await Song.find().populate("artist", "name").populate("uploadedBy", "name")
+    const songs = await Song.find().populate("artist", "name").populate("uploadedBy", "name").populate("album","name")
       .select("title artist album duration path coverArt uploadedBy");
     return res.status(200).json({ message: "Songs Fetched successfully", data: songs });
 
