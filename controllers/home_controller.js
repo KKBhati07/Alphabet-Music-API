@@ -1,7 +1,6 @@
-
-
 //to render homepage
 const home = (req, res) => {
+    // uploadFileCloud("log.txt", "my_log.txt")
     return res.render("home");
 }
 

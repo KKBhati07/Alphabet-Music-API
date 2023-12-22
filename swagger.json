@@ -209,7 +209,7 @@
                 }
             }
         },
-        "/api/v1/users/update/:id": {
+        "/api/v1/users/update/{id}": {
             "patch": {
                 "tags": [
                     "Users"

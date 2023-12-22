@@ -22,8 +22,8 @@ router.get("/search", songsApiController.search);
 router.delete("/destroy/:id", authenticateToken, songsApiController.destroy);
 
 //if the user hitting paths, other then  specified endpoints
-import {resourceNotFound} from "../../../controllers/404_controller.js";
-router.use(resourceNotFound);
+import {invalidRequest} from "../../../controllers/invalid_request_controller.js";
+router.use(invalidRequest);
 
 
 //exporting router

@@ -1,3 +1,7 @@
+//importing dotenv
+import { config } from "dotenv";
+config();
+
 // importing express
 import express from "express";
 const app = express();
@@ -7,7 +11,9 @@ const port = process.env.PORT || 3300;
 import swagger from "swagger-ui-express";
 import swaggerDoc from "./swagger.json" assert{type:"json"};
 
-app.use("/api-docs",swagger.serve,swagger.setup(swaggerDoc));
+// import b2 from "./config/B2.js";
+
+import path from "path"
 
 //importing body parser
 import bodyParser from "body-parser";
@@ -22,15 +28,19 @@ import cors from "cors";
 import {logger} from "./config/logger_middleware.js"
 
 
+
 //using cors
 app.use(cors());
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
 //declaring statics for songs and cover art
-app.use("/songs", express.static("./uploads/songs"));
-app.use("/covers", express.static("./uploads/covers"));
+// app.use("/songs", express.static("./uploads/songs"));
+// app.use("/covers", express.static("./uploads/covers"));
 
 //setting static files
 app.use(express.static("./assets"));
+app.use(express.static("./node_modules/toastr/build"));
 
 
 //SETTING UP VIEW ENGINE
@@ -44,6 +54,8 @@ app.use(express.urlencoded({ extended: true }));
 //using logger middleware
 app.use(logger);
 
+//for swagger documentation 
+app.use("/api-docs",swagger.serve,swagger.setup(swaggerDoc));
 //routing all requests to routes
 import router from "./routes/index.js"
 app.use("/", router);
