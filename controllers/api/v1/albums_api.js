@@ -5,7 +5,6 @@ import Song from "../../../models/Song.js";
 // importing logger middleware function
 import { log } from "../../../config/logger_middleware.js";
 
-
 //to fetch all the albums
 const fetch = async (req, res) => {
     try {
@@ -21,8 +20,6 @@ const fetch = async (req, res) => {
 
     }
 }
-
-
 
 //ti fetch the song by album id
 const fetchSongs = async (req, res) => {

@@ -1,6 +1,4 @@
 import { Storage } from "@google-cloud/storage";
-  
-  
 const projectId=process.env.GCS_PROJECT_ID.toString().replace(/\\n/g, '\n');
 const bucketName=process.env.GCS_BUCKET_NAME.toString().replace(/\\n/g, '\n')
 const storage=new Storage({projectId,credentials:{
