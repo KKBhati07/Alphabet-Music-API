@@ -5,7 +5,7 @@ The Alphabet Music API offers a comprehensive set of features for managing and e
 
 ## Links
 - [API Link](https://good-tan-beaver-hat.cyclic.app)
-- [APK Link](https://drive.google.com/file/d/1dxlk-kP6_oPUFdnqb_ZJbzpEBRCu3bg_/view?usp=sharing)
+- [APK Link](https://drive.google.com/file/d/1tbtzI3upM4y6SnybZ2CNN2lYXOPCnsbS/view?usp=sharing)
 - [APK Source code](https://github.com/KKBhati07/Alphabet-Music)
 
 ## Installation
